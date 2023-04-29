@@ -20,6 +20,10 @@ export async function createReservation(req: AuthenticatedRequest, res: Response
   const { roomId } = req.body;
 
   try {
-    const reservation = await bookingsService.makeReservation(userId);
-  } catch (error) {}
+    const reservation = await bookingsService.makeReservation(userId, roomId);
+  } catch (error) {
+    if (error.name === 'NotFoundError') return res.sendStatus(404);
+
+    if (error.name === 'RequestError') return res.sendStatus(403);
+  }
 }
