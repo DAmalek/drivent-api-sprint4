@@ -21,9 +21,24 @@ export async function createReservation(req: AuthenticatedRequest, res: Response
 
   try {
     const reservation = await bookingsService.makeReservation(userId, roomId);
+
+    return res.status(httpStatus.OK).send({ bookingId: reservation.id });
   } catch (error) {
     if (error.name === 'NotFoundError') return res.sendStatus(404);
+    if (error.name === 'RequestError') return res.sendStatus(403);
+  }
+}
 
+export async function changeReservation(req: AuthenticatedRequest, res: Response) {
+  const { bookingId } = req.params;
+  const { userId } = req;
+  const { roomId } = req.body;
+
+  try {
+    const update = await bookingsService.updateBooking(Number(bookingId), userId, roomId);
+    return res.status(httpStatus.OK).send(update);
+  } catch (error) {
+    if (error.name === 'NotFoundError') return res.sendStatus(404);
     if (error.name === 'RequestError') return res.sendStatus(403);
   }
 }

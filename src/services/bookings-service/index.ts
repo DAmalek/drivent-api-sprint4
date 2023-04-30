@@ -32,4 +32,17 @@ async function makeReservation(userId: number, roomId: number) {
   return booking;
 }
 
-export default { getReservation, makeReservation };
+async function updateBooking(bookingId: number, userId: number, roomId: number) {
+  const bookingExist = await bookingRepository.findBookingById(bookingId);
+  if (!bookingExist) throw requestError(403, 'no booking found');
+  if (bookingExist.Room.id !== roomId) throw notFoundError();
+
+  const roomCapacity = await bookingRepository.findRoomById(roomId);
+  if (roomCapacity.Booking.length >= roomCapacity.capacity) throw requestError(403, 'full capacity');
+
+  const updateRoom = await bookingRepository.updateBooking(bookingId, roomId);
+
+  return updateRoom;
+}
+
+export default { getReservation, makeReservation, updateBooking };
