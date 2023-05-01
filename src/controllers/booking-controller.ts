@@ -9,7 +9,7 @@ export async function listReservation(req: AuthenticatedRequest, res: Response) 
   try {
     const reservations = await bookingsService.getReservation(userId);
 
-    return res.status(httpStatus.OK).send(reservations);
+    return res.status(httpStatus.OK).send({ bookingId: reservations.id });
   } catch (error) {
     return res.status(httpStatus.NOT_FOUND);
   }

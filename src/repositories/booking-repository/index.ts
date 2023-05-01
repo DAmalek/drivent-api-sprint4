@@ -2,7 +2,7 @@ import { Booking } from '@prisma/client';
 import { prisma } from '@/config';
 
 async function getAll(userId: number) {
-  return prisma.booking.findMany({
+  return prisma.booking.findFirst({
     where: { userId: userId },
     select: {
       id: true,
