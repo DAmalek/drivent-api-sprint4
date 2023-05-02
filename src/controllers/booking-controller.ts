@@ -2,6 +2,7 @@ import { Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import bookingsService from '@/services/bookings-service';
+import { requestError } from '@/errors';
 
 export async function listReservation(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
@@ -9,7 +10,7 @@ export async function listReservation(req: AuthenticatedRequest, res: Response) 
   try {
     const reservations = await bookingsService.getReservation(userId);
 
-    return res.status(httpStatus.OK).send({ bookingId: reservations.id });
+    return res.status(httpStatus.OK).send(reservations);
   } catch (error) {
     return res.status(httpStatus.NOT_FOUND);
   }
@@ -18,6 +19,7 @@ export async function listReservation(req: AuthenticatedRequest, res: Response) 
 export async function createReservation(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { roomId } = req.body;
+  if (!roomId) return res.status(403).send('no body');
 
   try {
     const reservation = await bookingsService.makeReservation(userId, roomId);
