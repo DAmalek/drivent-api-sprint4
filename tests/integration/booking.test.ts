@@ -282,10 +282,11 @@ describe('PUT /booking/:bookingId', () => {
 
       const hotel = await createHotel();
       const room = await createRoomWithHotelId(hotel.id);
-      const booking = await createBooking(user.id, room.id);
+      const booking1 = await createBooking(user.id, room.id);
+      const booking2 = await createBooking(user.id, room.id);
       const body = { roomId: room.id };
 
-      const response = await server.put(`/booking/${booking.id}`).set('Authorization', `Bearer ${token}`).send(body);
+      const response = await server.put(`/booking/${booking1.id}`).set('Authorization', `Bearer ${token}`).send(body);
 
       expect(response.status).toEqual(httpStatus.FORBIDDEN);
     });
@@ -320,22 +321,6 @@ describe('PUT /booking/:bookingId', () => {
       const response = await server.put(`/booking/${booking.id}`).set('Authorization', `Bearer ${token}`).send(body);
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
-    });
-
-    it('should respond with status 403 if new room is at capacity', async () => {
-      const user = await createUser();
-      const token = await generateValidToken(user);
-
-      const hotel = await createHotel();
-      const room = await createRoomWithHotelId(hotel.id);
-      const booking1 = await createBooking(user.id, room.id);
-      const booking2 = await createBooking(user.id, room.id);
-
-      const body = { roomId: room.id };
-
-      const response = await server.put(`/booking/${booking2.id}`).set('Authorization', `Bearer ${token}`).send(body);
-
-      expect(response.status).toEqual(httpStatus.FORBIDDEN);
     });
   });
 });
