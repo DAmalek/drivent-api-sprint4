@@ -1,4 +1,3 @@
-import { Booking } from '@prisma/client';
 import { prisma } from '@/config';
 
 async function getAll(userId: number) {
@@ -12,7 +11,7 @@ async function getAll(userId: number) {
 }
 
 async function findRoomById(roomId: number) {
-  return prisma.room.findFirst({
+  return prisma.room.findUnique({
     where: { id: roomId },
     include: { Booking: true },
   });
