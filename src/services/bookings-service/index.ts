@@ -1,13 +1,13 @@
 import ticketService from '../tickets-service';
 import { notFoundError, requestError } from '@/errors';
-import { cannotListHotelsError } from '@/errors/cannot-list-hotels-error';
+
 import bookingRepository from '@/repositories/booking-repository';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 
 async function getReservation(userId: number) {
   const booking = await bookingRepository.getAll(userId);
-  if (!booking) throw notFoundError;
+  if (!booking) throw notFoundError();
 
   return booking;
 }

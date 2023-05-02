@@ -2,7 +2,6 @@ import { Response } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import bookingsService from '@/services/bookings-service';
-import { requestError } from '@/errors';
 
 export async function listReservation(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
